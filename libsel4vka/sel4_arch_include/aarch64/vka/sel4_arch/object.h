@@ -18,6 +18,17 @@
 #include <vka/kobject_t.h>
 #include <utils/util.h>
 
+/*resource allocation interfaces for virtual machine extensions on ARM */
+#ifdef CONFIG_ARM_HYPERVISOR_SUPPORT
+static inline int vka_alloc_vcpu(vka_t *vka, vka_object_t *result)
+{
+    return vka_alloc_object(vka, seL4_ARM_VCPUObject, seL4_ARM_VCPUBits, result);
+}
+
+LEAKY(vcpu)
+#endif
+
+
 static inline int vka_alloc_page_global_directory(vka_t *vka, vka_object_t *result)
 {
     return vka_alloc_object(vka, kobject_get_type(KOBJECT_PAGE_GLOBAL_DIRECTORY, 0), seL4_PGDBits, result);
@@ -53,6 +64,10 @@ vka_arm_mode_get_object_size(seL4_Word objectType)
         return seL4_PGDBits;
     case seL4_ARM_PageUpperDirectoryObject:
         return seL4_PUDBits;
+#ifdef CONFIG_ARM_HYPERVISOR_SUPPORT
+    case seL4_ARM_VCPUObject:
+        return seL4_ARM_VCPUBits;
+#endif
     default:
         /* Unknown object type. */
         ZF_LOGF("Unknown object type");
