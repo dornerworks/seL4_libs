@@ -26,7 +26,7 @@ seL4_Error simple_default_get_irq(void *data, int irq, seL4_CNode root, seL4_Wor
     return seL4_IRQControl_Get(seL4_CapIRQControl, irq, root, index, depth);
 }
 
-#ifdef CONFIG_ARM_SMMU
+#ifdef CONFIG_TK1_SMMU
 seL4_Error simple_default_get_iospace_cap_count(void *data, int *count)
 {
     seL4_BootInfo *bi = data;
@@ -81,13 +81,24 @@ seL4_CPtr simple_default_get_iospace_nth_cap(void *data, int n)
 
 #endif
 
+#ifdef CONFIG_ARM_SMMU_V2
+seL4_CPtr simple_default_get_iospace(void *data, uint16_t streamID)
+{
+    return seL4_CapIOSpace;
+}
+#endif
+
 void
 simple_default_init_arch_simple(arch_simple_t *simple, void *data)
 {
     simple->data = data;
     simple->irq = simple_default_get_irq;
-#ifdef CONFIG_ARM_SMMU
+#ifdef CONFIG_TK1_SMMU
     simple->iospace_cap_count = simple_default_get_iospace_cap_count;
     simple->iospace_get_nth_cap = simple_default_get_iospace_nth_cap;
+#endif
+
+#ifdef CONFIG_ARM_SMMU_V2
+    simple->iospace = simple_default_get_iospace;
 #endif
 }

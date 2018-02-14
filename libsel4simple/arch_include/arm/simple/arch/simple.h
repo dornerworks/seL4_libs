@@ -33,11 +33,16 @@ typedef seL4_Error (*simple_get_IRQ_handler_fn)(void *data, int irq, seL4_CNode 
 typedef seL4_Error (*simple_get_iospace_cap_count_fn)(void *data, int *count);
 typedef seL4_CPtr  (*simple_get_nth_iospace_cap_fn)(void *data, int n);
 
+typedef seL4_CPtr (*simple_get_iospace_fn)(void *data, uint16_t streamID);
+
 typedef struct arch_simple {
     simple_get_IRQ_handler_fn irq;
-#ifdef CONFIG_ARM_SMMU
+#ifdef CONFIG_TK1_SMMU
     simple_get_iospace_cap_count_fn iospace_cap_count;
     simple_get_nth_iospace_cap_fn   iospace_get_nth_cap;
+#endif
+#ifdef CONFIG_ARM_SMMU_V2
+    simple_get_iospace_fn iospace;
 #endif
     void *data;
 } arch_simple_t;

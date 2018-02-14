@@ -526,7 +526,7 @@ simple_get_iospace(simple_t *simple, uint16_t domainID, uint16_t deviceID, cspac
 }
 #endif
 
-#ifdef CONFIG_ARM_SMMU
+#ifdef CONFIG_TK1_SMMU
 static inline seL4_Error
 simple_get_iospace_cap_count(simple_t *simple, int *count)
 {
@@ -567,6 +567,26 @@ simple_get_nth_iospace_cap(simple_t *simple, int n)
     }
 
     return simple->arch_simple.iospace_get_nth_cap(simple->data, n);
+}
+#endif
+
+#ifdef CONFIG_ARM_SMMU_V2
+static inline seL4_CPtr simple_get_iospace(simple_t *simple, uint16_t streamID)
+{
+    if (!simple) {
+        ZF_LOGE("Simple is NULL");
+        return seL4_CapNull;
+    }
+    if (!simple->data) {
+        ZF_LOGE("Simple data is NULL");
+        return seL4_CapNull;
+    }
+    if (!simple->arch_simple.iospace) {
+        ZF_LOGE("arch %s not implemented", __FUNCTION__);
+        return seL4_CapNull;
+    }
+
+    return simple->arch_simple.iospace(simple->data, streamID);
 }
 #endif
 

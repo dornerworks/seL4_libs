@@ -60,10 +60,10 @@ struct env {
     seL4_CPtr asid_pool;
     seL4_CPtr asid_ctrl;
     seL4_CPtr sched_ctrl;
-#ifdef CONFIG_IOMMU
+#if CONFIG_IOMMU || CONFIG_ARM_SMMU_V2
     seL4_CPtr io_space;
-#endif /* CONFIG_IOMMU */
-#ifdef CONFIG_ARM_SMMU
+#endif
+#ifdef CONFIG_TK1_SMMU
     seL4_SlotRegion io_space_caps;
 #endif
     seL4_Word cores;
