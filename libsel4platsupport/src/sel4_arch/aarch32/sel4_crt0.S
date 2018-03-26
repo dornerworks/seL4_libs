@@ -133,7 +133,7 @@ tls_memsize:
     .balign  8
 
 _stack_bottom:
-    .space  16384
+    .space  CONFIG_LIB_SEL4_PLAT_SUPPORT_STACK_SIZE
 _stack_top:
 
 #endif /* CONFIG_LIB_SEL4_PLAT_SUPPORT_SEL4_START */

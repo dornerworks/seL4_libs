@@ -42,5 +42,13 @@ config LIB_SEL4_PLAT_SUPPORT_SEL4_START
         Emit a _sel4_start that sets up a stack and does
         what's required to enter a regular _start routine
 
+config LIB_SEL4_PLAT_SUPPORT_STACK_SIZE
+    int "Stack size to use for _sel4_start"
+    depends on LIB_SEL4_PLAT_SUPPORT && LIB_SEL4_PLAT_SUPPORT_SEL4_START
+    default 16384
+    help
+        Stack size to use for _sel4_start. May need to be adjusted based
+        on size of application/number of threads
+
 config HAVE_LIB_SEL4_PLAT_SUPPORT
     bool
