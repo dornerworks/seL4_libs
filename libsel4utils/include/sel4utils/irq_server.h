@@ -93,9 +93,11 @@ irq_server_t *irq_server_new(vspace_t *vspace, vka_t *vka, seL4_Word priority,
  *                              'null'
  * @param[in] id_hint           'Hint' to be passed to the IRQ server when assigning an
  *                              ID, >= 0 for a valid hint, -1 otherwise
+ * @param[in] core              The core on which to run the new irq server for MCS.
+ *                              Unused for non-MCS configurations.
  */
 thread_id_t irq_server_thread_new(irq_server_t *irq_server, seL4_CPtr provided_ntfn,
-                                  seL4_Word usable_mask, thread_id_t id_hint);
+                                  seL4_Word usable_mask, thread_id_t id_hint, seL4_Word core);
 
 /**
  * Enable an IRQ and register a callback function. This functionality is

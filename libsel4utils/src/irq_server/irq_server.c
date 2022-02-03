@@ -146,7 +146,7 @@ static void _irq_thread_entry(irq_server_thread_t *my_thread_info, ps_irq_ops_t 
 }
 
 thread_id_t irq_server_thread_new(irq_server_t *irq_server, seL4_CPtr provided_ntfn,
-                                  seL4_Word usable_mask, thread_id_t id_hint)
+                                  seL4_Word usable_mask, thread_id_t id_hint, seL4_Word core)
 {
     bool thread_created = false;
     int error;
@@ -221,6 +221,9 @@ thread_id_t irq_server_thread_new(irq_server_t *irq_server, seL4_CPtr provided_n
     /* Create the IRQ thread */
     sel4utils_thread_config_t config = thread_config_default(irq_server->simple, irq_server->cspace,
                                                              seL4_NilData, 0, irq_server->priority);
+    if (config_set(CONFIG_KERNEL_MCS)) {
+        config.sched_params.sched_ctrl = simple_get_sched_ctrl(irq_server->simple, core);
+    }
     error = sel4utils_configure_thread_config(irq_server->vka, irq_server->vspace,
                                               irq_server->vspace, config, &(new_thread->thread));
     if (error) {
